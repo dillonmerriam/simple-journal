@@ -1,25 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import { onSnapshot, collection } from 'firebase/firestore';
+import db from './firebase';
 
 function App() {
+  const [entries, setEntries] = useState([]);
+
+  useEffect(
+    () => 
+      onSnapshot(collection(db, "entries"), (snapshot) => 
+        setEntries(snapshot.docs.map((doc) => doc.data()))
+      ),
+     []
+  );
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <span>hello</span>
+      <div>
+      {
+        entries.map(item => (
+          <div className='entries'>
+          {item.entry}
+          </div>
+        )
+        )}
+      </div>
     </div>
-  );
+  )
 }
 
 export default App;
